@@ -17,13 +17,13 @@ namespace Gestor.Api.Data
 
             modelBuilder.Entity<OrdemServico>()
                 .HasOne(o => o.Cliente)
-                .WithMany(c => OrdensServico)
+                .WithMany(c => c.Ordens)
                 .HasForeignKey(o => o.ClienteId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<OrdemServico>()
                .HasOne(o => o.CategoriaServico)
-               .WithMany(c => OrdensServico)
+               .WithMany(c => c.Ordens)
                .HasForeignKey(o => o.CategoriaServicoId)
                .OnDelete(DeleteBehavior.SetNull);
 
