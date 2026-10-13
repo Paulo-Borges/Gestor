@@ -1,3 +1,6 @@
+using Gestor.Api.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,15 +8,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
+//CONECTANDO O SWAGGER ------------x-------------------1--------------
 builder.Services.AddSwaggerGen();
+
+//CONECTANDO O DEFAULTCONNECTION ------------x-------------------2--------------
+builder.Services.AddDbContext<AplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //app.MapOpenApi();
+    //CONECTANDO O SWAGGER ------------x-------------------1--------------
     app.UseSwagger();
     app.UseSwaggerUI();
 }
