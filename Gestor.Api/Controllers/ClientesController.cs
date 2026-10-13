@@ -1,4 +1,5 @@
 ﻿using Gestor.Api.Data;
+using Gestor.Api.DTOs;
 using Gestor.Api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,26 +19,52 @@ namespace Gestor.Api.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateCliente([FromBody] Cliente cliente)
+        public async Task<ActionResult<ClienteResponseDto>> CreateCliente([FromBody] ClienteCreateDto clienteDto)
         {
-            if (cliente == null || !ModelState.IsValid)
+            if (clienteDto == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            var cliente = new Cliente
+            {
+                Nome = clienteDto.Nome,
+                Email = clienteDto.Email,
+                Telefone = clienteDto.Telefone,
+                DataCadastro = DateTime.UtcNow
+            };
+
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetClienteById), new { id = cliente.Id }, cliente);
+
+            var ResponseDto = new ClienteResponseDto
+            {
+                Id = cliente.Id,
+                Nome = cliente.Nome,
+                Email = cliente.Email,
+                Telefone = cliente.Telefone,
+                DataCadastro = cliente.DataCadastro
+            };
+            return CreatedAtAction(nameof(GetClienteById), new { id = ResponseDto.Id }, ResponseDto);
         }   
         
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cliente>> GetClienteById(int id)
+        public async Task<ActionResult<ClienteResponseDto>> GetClienteById(int id)
         {
             var cliente = await _context.Clientes.FindAsync(id);
             if (cliente == null)
             {
                 return NotFound();
             }
-            return Ok(cliente);
+            var clienteResponseDto = new ClienteResponseDto
+            {
+                Id = cliente.Id,
+                Nome = cliente.Nome,
+                Email = cliente.Email,
+                Telefone = cliente.Telefone,
+                DataCadastro = cliente.DataCadastro
+            };
+            return Ok(clienteResponseDto);
         }
     }
 }
