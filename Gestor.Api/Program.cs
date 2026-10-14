@@ -17,6 +17,15 @@ builder.Services.AddDbContext<AplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+//CONECTANDO O CORS ------------x-------------------3--------------
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllAngular", Policy =>
+    Policy.WithOrigins("http://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +39,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+//CONECTANDO O CORS ------------x-------------------3--------------
+app.UseCors("AllAmgular");
 
 app.MapControllers();
 
