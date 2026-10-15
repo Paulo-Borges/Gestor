@@ -40,7 +40,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 //CONECTANDO O CORS ------------x-------------------3--------------
-app.UseCors("AllAmgular");
+app.UseCors("AllAngular");
 
 app.MapControllers();
 
